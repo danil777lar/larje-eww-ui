@@ -9,6 +9,8 @@
 using string = std::string;
 namespace fs = std::filesystem;
 
+std::vector<window> windows;
+
 std::vector<string> find_window_configs(const fs::path& root, const string& target_name)
 {
     std::vector<string> configs = {};
@@ -37,10 +39,11 @@ void initializer::initialize()
     const string root_dir = home_dir + "/.config/eww";
     const string file_name = "window.json";
 
-    const std::vector<string> windows = find_window_configs(root_dir, file_name);
-    for (const string& w : windows)
+    const std::vector<string> windows_configs = find_window_configs(root_dir, file_name);
+    for (const string& w : windows_configs)
     {
-        window(root_dir, w);
+       window* window_instance = new  window(root_dir, w);
+       windows.push_back(window_instance);
     }
 
     std::cout << "Found windows count: " << windows.size() << std::endl;
