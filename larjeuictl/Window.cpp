@@ -1,10 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <charconv>
+#include <signal.h>
 #include <bits/ostream.tcc>
 #include "Window.h"
-
-#include <charconv>
 
 #include "json.hpp"
 
@@ -14,7 +14,9 @@ using json = nlohmann::json;
 string root_path;
 string window_path;
 json config_content;
+
 std::vector<string> widget_commands;
+std::vector<pid_t> subprocesses;
 
 Window::Window(const string &root_path, const string &window_path) {
     this->root_path = root_path;
@@ -30,13 +32,17 @@ Window::~Window() {
 }
 
 void Window::open() {
+    subprocesses.clear();
     for (string cmd : widget_commands) {
-        system(cmd.c_str());
+        run_subprocess("./widgets/" + cmd);
     }
     system(("eww open " + config_content["name"].get<string>()).c_str());
 }
 
 void Window::close() {
+    for (pid_t pid: subprocesses) {
+        kill_subprocess(pid);
+    }
     system(("eww close " + config_content["name"].get<string>()).c_str());
 }
 
@@ -149,4 +155,35 @@ std::vector<string> Window::get_widget_commands() const {
     std::vector<string>* tmp = new std::vector<string>();
     get_widgets(config_content["widgets_root"], 0, tmp);
     return *tmp;
+}
+
+pid_t Window::run_subprocess(string cmd) {
+    std::istringstream iss(cmd);
+    std::string token;
+    std::vector<char*> args;
+    std::vector<std::string> storage;
+    while (iss >> token) {
+        storage.push_back(token);
+    }
+    for (auto& str : storage) {
+        args.push_back(str.data());
+    }
+    args.push_back(nullptr);
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        execvp(args[0], args.data());
+        _exit(1);
+    }
+    else if (pid > 0) {
+        return pid;
+    }
+    else {
+        std::cerr << "Fork failed\n";
+        return -1;
+    }
+}
+
+void Window::kill_subprocess(pid_t pid) {
+    kill(pid, SIGTERM);
 }
