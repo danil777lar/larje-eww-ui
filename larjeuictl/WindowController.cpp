@@ -30,7 +30,6 @@ std::vector<string> WindowController::find_window_configs(const fs::path& root, 
 
 WindowController::WindowController() {
     system("eww kill");
-    system("eww daemon");
 
     const string home_dir = std::getenv("HOME") ? std::getenv("HOME") : "~";
     const string root_dir = home_dir + "/.config/eww";
@@ -40,6 +39,11 @@ WindowController::WindowController() {
     for (const string& win : windows_configs){
         Window* window_instance = new Window(root_dir, win);
         windows.push_back(window_instance);
+    }
+
+    system("eww daemon");
+    for (Window* win : windows) {
+        win->open();
     }
 
     std::cout << "Found windows count: " << windows.size() << std::endl;
