@@ -29,6 +29,8 @@ std::vector<string> WindowController::find_window_configs(const fs::path& root, 
 }
 
 WindowController::WindowController() {
+
+    sleep(3);
     system("eww kill");
 
     const string home_dir = std::getenv("HOME") ? std::getenv("HOME") : "~";

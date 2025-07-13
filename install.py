@@ -33,7 +33,7 @@ def generate_service_content():
     After=network.target
 
     [Service]
-    ExecStart=%h/{EXECUTABLE_PATH}/larjeuictl
+    ExecStart=./%h/{EXECUTABLE_PATH}/larjeuictl
     WorkingDirectory=%h/{WORKING_DIRECTORY}
     Restart=always
     StandardOutput=journal
