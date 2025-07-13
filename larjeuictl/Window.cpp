@@ -95,9 +95,8 @@ string Window::get_widgets(json box, int depth, std::vector<string>* widget_comm
         for (auto& key : box["widgets"]) {
             if (key.is_string()) {
                 string widget_name = get_widget_name(key.get<string>(), widget_commands->size());
-
                 string command = key.get<string>() + " --var_name " + "var-" + widget_name;
-                widget_commands->push_back(key.get<string>());
+                widget_commands->push_back(command);
                 result += spacing + "(" + widget_name + ")" + "\n";
             }
             else {
