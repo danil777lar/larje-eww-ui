@@ -6,11 +6,12 @@
 using string = std::string;
 using json = nlohmann::json;
 
-class window
+class Window
 {
     public:
 
-    window(const string &root_path, const string &window_path);
+    Window(const string &root_path, const string &window_path);
+    ~Window();
 
     private:
 

@@ -1,7 +1,7 @@
 add_executable(larjeuictl
         main.cpp
-        initializer.cpp
-        initializer.h
-        window.cpp
-        window.h
+        WindowController.cpp
+        WindowController.h
+        Window.cpp
+        Window.h
 )

@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <fstream>
+#include <filesystem>
+#include <iostream>
+#include <csignal>
+#include "WindowController.h"
+#include "Window.h"
+
+using string = std::string;
+namespace fs = std::filesystem;
+
+std::vector<Window*> windows = {};
+
+std::vector<string> WindowController::find_window_configs(const fs::path& root, const string& target_name)
+{
+    std::vector<string> configs = {};
+
+    try {
+        for (const auto& entry : fs::recursive_directory_iterator(root)) {
+            if (entry.is_regular_file() && entry.path().filename() == target_name) {
+                configs.push_back(entry.path().string());
+            }
+        }
+    }
+    catch (const fs::filesystem_error& e){}
+
+    return configs;
+}
+
+WindowController::WindowController() {
+    system("eww kill");
+    system("eww daemon");
+
+    const string home_dir = std::getenv("HOME") ? std::getenv("HOME") : "~";
+    const string root_dir = home_dir + "/.config/eww";
+    const string file_name = "window.json";
+
+    const std::vector<string> windows_configs = find_window_configs(root_dir, file_name);
+    for (const string& win : windows_configs){
+        Window* window_instance = new Window(root_dir, win);
+        windows.push_back(window_instance);
+    }
+
+    std::cout << "Found windows count: " << windows.size() << std::endl;
+}
+
+WindowController::~WindowController() {
+    for (Window* win : windows) {
+        delete win;
+    }
+    windows.clear();
+
+    system("eww kill");
+}

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <bits/ostream.tcc>
-#include "window.h"
+#include "Window.h"
 #include "json.hpp"
 
 using string = std::string;
@@ -12,15 +12,21 @@ string root_path;
 string window_path;
 json config_content;
 
-window::window(const string &root_path, const string &window_path) {
+Window::Window(const string &root_path, const string &window_path) {
     this->root_path = root_path;
     this->window_path = window_path;
 
     config_content = parse_config();
     create_yuck_file();
+
+    system(("eww open " + config_content["name"].get<string>()).c_str());
 }
 
-void window::create_yuck_file() const {
+Window::~Window() {
+    std::cout << "Delete window " << config_content["name"] << std::endl;
+}
+
+void Window::create_yuck_file() const {
     string name = config_content["name"];
 
     auto path = std::filesystem::path(window_path);
@@ -31,7 +37,7 @@ void window::create_yuck_file() const {
     yuck_file.close();
 }
 
-string window::get_yuck_content() const {
+string Window::get_yuck_content() const {
     string yuck_content = "";
     yuck_content += "(defwindow " + config_content["name"].get<string>() + "\n";
 
@@ -51,7 +57,7 @@ string window::get_yuck_content() const {
     return yuck_content;
 }
 
-string window::get_widgets(json box, int depth) const {
+string Window::get_widgets(json box, int depth) const {
 
     string spacing = "";
     for (int i = 0; i <= depth; ++i) {
@@ -81,7 +87,7 @@ string window::get_widgets(json box, int depth) const {
 }
 
 
-json window::parse_config() const {
+json Window::parse_config() const {
     const std::ifstream file(window_path);
     if (!file) return NULL;
 
