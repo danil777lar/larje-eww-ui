@@ -1,1 +1,1 @@
-add_subdirectory(widget_clock)
+add_subdirectory(widget-clock)

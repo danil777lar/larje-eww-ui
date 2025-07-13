@@ -1,0 +1,1 @@
+add_executable(widget-clock main.cpp)
