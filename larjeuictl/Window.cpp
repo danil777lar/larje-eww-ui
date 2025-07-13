@@ -14,12 +14,14 @@ using json = nlohmann::json;
 string root_path;
 string window_path;
 json config_content;
+std::vector<string> widget_commands;
 
 Window::Window(const string &root_path, const string &window_path) {
     this->root_path = root_path;
     this->window_path = window_path;
 
     config_content = parse_config();
+    widget_commands = get_widget_commands();
     create_yuck_file();
 }
 
@@ -28,7 +30,14 @@ Window::~Window() {
 }
 
 void Window::open() {
+    for (string cmd : widget_commands) {
+        system(cmd.c_str());
+    }
     system(("eww open " + config_content["name"].get<string>()).c_str());
+}
+
+void Window::close() {
+    system(("eww close " + config_content["name"].get<string>()).c_str());
 }
 
 void Window::create_yuck_file() const {
@@ -43,14 +52,11 @@ void Window::create_yuck_file() const {
 }
 
 string Window::get_yuck_content() const {
-    std::vector<string>* widget_commands = new std::vector<string>();
-    string widget_markup = get_widgets(config_content["widgets_root"], 0, widget_commands);
-
     string yuck_content = "";
 
-    for (int i = 0; i < widget_commands->size(); ++i) {
-        string name = get_widget_name((*widget_commands)[i], i);
-        yuck_content += "(defvar var-" + name + " \" add eww auto initialization\")\n";
+    for (int i = 0; i < widget_commands.size(); ++i) {
+        string name = get_widget_name(widget_commands[i], i);
+        yuck_content += "(defvar var-" + name + " \" (label :class 'back' :text '+') \")\n";
     }
 
     yuck_content += "\n\n";
@@ -60,7 +66,7 @@ string Window::get_yuck_content() const {
     }
 
     if (config_content.contains("widgets_root")) {
-        yuck_content += widget_markup;
+        yuck_content += get_widgets(config_content["widgets_root"], 0, new std::vector<string>());
     }
     else {
         std::cout << "window.get_yuck_content: no widgets_root found in config" << std::endl;
@@ -68,18 +74,16 @@ string Window::get_yuck_content() const {
     yuck_content += ")";
 
     yuck_content += "\n\n";
-    for (int i = 0; i < widget_commands->size(); ++i) {
-        string name = get_widget_name((*widget_commands)[i], i);
+    for (int i = 0; i < widget_commands.size(); ++i) {
+        string name = get_widget_name(widget_commands[i], i);
         yuck_content += "(defwidget " + name + " []\n";
         yuck_content += "   (literal :content var-" + name + "))\n";
     }
 
-    std::cout << "widgets: " << widget_commands->size() << std::endl;
-
     return yuck_content;
 }
 
-string Window::get_widgets(json box, int depth, std::vector<string>* widget_commands) const {
+string Window::get_widgets(json box, int depth, std::vector<string>* widget_out) const {
     string spacing = "";
     for (int i = 0; i <= depth; ++i) {
         spacing += "  ";
@@ -94,13 +98,13 @@ string Window::get_widgets(json box, int depth, std::vector<string>* widget_comm
     if (box.contains("widgets")) {
         for (auto& key : box["widgets"]) {
             if (key.is_string()) {
-                string widget_name = get_widget_name(key.get<string>(), widget_commands->size());
+                string widget_name = get_widget_name(key.get<string>(), widget_out->size());
                 string command = key.get<string>() + " --var_name " + "var-" + widget_name;
-                widget_commands->push_back(command);
+                widget_out->push_back(command);
                 result += spacing + "(" + widget_name + ")" + "\n";
             }
             else {
-                result += spacing + get_widgets(key, depth + 1, widget_commands);
+                result += spacing + get_widgets(key, depth + 1, widget_out);
             }
         }
     }
@@ -139,4 +143,10 @@ json Window::parse_config() const {
     }
 
     return parsed;
+}
+
+std::vector<string> Window::get_widget_commands() const {
+    std::vector<string>* tmp = new std::vector<string>();
+    get_widgets(config_content["widgets_root"], 0, tmp);
+    return *tmp;
 }

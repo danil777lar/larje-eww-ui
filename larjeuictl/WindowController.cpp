@@ -42,6 +42,7 @@ WindowController::WindowController() {
     }
 
     system("eww daemon");
+
     for (Window* win : windows) {
         win->open();
     }

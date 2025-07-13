@@ -14,15 +14,18 @@ class Window
     ~Window();
 
     void open();
+    void close();
 
     private:
 
     string root_path;
     string window_path;
     json config_content;
+    std::vector<string> widget_commands;
 
     void create_yuck_file() const;
     string get_yuck_content() const;
+    std::vector<string> get_widget_commands() const;
     string get_widgets(json box, int depth, std::vector<string>* widget_commands) const;
     string get_widget_name(string widget_command, int index) const;
     json parse_config() const;
