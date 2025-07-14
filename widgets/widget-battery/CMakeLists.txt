@@ -1,0 +1,1 @@
+add_executable(widget-battery main.cpp)

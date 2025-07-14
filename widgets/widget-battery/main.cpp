@@ -1,6 +1,6 @@
 #include <chrono>
+#include <fstream>
 #include <iostream>
-#include <sstream>
 #include <unistd.h>
 #include <unordered_map>
 
@@ -20,20 +20,23 @@ std::unordered_map<std::string, std::string> process_args(int argc, char **argv)
     return args;
 }
 
-std::string get_current_time_str() {
-    auto now = std::chrono::system_clock::now();
-    std::time_t t_c = std::chrono::system_clock::to_time_t(now);
-    std::tm* local_time = std::localtime(&t_c);
+std::string get_current_battery_percent_str() {
+    std::string path = "/sys/class/power_supply/BAT0/capacity";
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Cant open " << path << std::endl;
+        return "";
+    }
 
-    std::ostringstream oss;
-    oss << std::put_time(local_time, "%H:%M:%S");
-    return oss.str();
+    int percentage;
+    file >> percentage;
+    return std::to_string(percentage);
 }
 
 int main(int argc, char **argv) {
     std::unordered_map<std::string, std::string> args = process_args(argc, argv);
 
-    int update_time = 1;
+    int update_time = 5;
     if (args.contains("--update_time")) {
         update_time = atoi(args["--update_time"].c_str());
     }
@@ -49,7 +52,7 @@ int main(int argc, char **argv) {
     while (true) {
         string var_content = "";
         var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
-        var_content += "\'" + get_current_time_str() + "\'";
+        var_content += "\'" + get_current_battery_percent_str() + "\'";
         var_content += ")";
 
 
