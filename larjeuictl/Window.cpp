@@ -32,9 +32,19 @@ Window::~Window() {
 }
 
 void Window::open() {
+    std::cout << "Open window " << config_content["name"] << std::endl;
+    std::cout << " " << std::endl;
     subprocesses.clear();
-    for (string cmd : widget_commands) {
-        run_subprocess("./widgets/" + cmd);
+    std::cout << "Start cicle b" << std::endl;
+    for (int i = 0; i < widget_commands.size(); ++i) {
+        pid_t subprocess = run_subprocess("./widgets/" + widget_commands[i]);
+        if (subprocess != -1) {
+            subprocesses.push_back(subprocess);
+        } else {
+            std::cout << "Failed to run widget command: " << widget_commands[i] << std::endl;
+        }
+
+        std::cout << " " << std::endl;
     }
     system(("eww open " + config_content["name"].get<string>()).c_str());
 }
@@ -170,16 +180,21 @@ pid_t Window::run_subprocess(string cmd) {
     }
     args.push_back(nullptr);
 
+    std::cout << "Run window cmd: " << cmd << std::endl;
+
     pid_t pid = fork();
     if (pid == 0) {
+        std::cout << "Запускаю: " << cmd << " (pid: " << getpid() << ")" << std::endl;
         execvp(args[0], args.data());
+        perror("execvp");
         _exit(1);
     }
     else if (pid > 0) {
+        std::cout << "Процесс запущен в фоне (pid: " << pid << ")" << std::endl;
         return pid;
     }
     else {
-        std::cerr << "Fork failed\n";
+        perror("fork");
         return -1;
     }
 }

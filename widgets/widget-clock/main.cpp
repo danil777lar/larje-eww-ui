@@ -59,5 +59,7 @@ int main(int argc, char **argv) {
         system(command.c_str());
     }
 
+    system("notify-send 'stop widget clock'");
+
     return 0;
 }

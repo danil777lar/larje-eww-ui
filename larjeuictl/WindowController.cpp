@@ -28,9 +28,17 @@ std::vector<string> WindowController::find_window_configs(const fs::path& root, 
     return configs;
 }
 
-WindowController::WindowController() {
+void print_working_directory() {
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+        std::cout << "Current working directory: " << cwd << std::endl;
+    } else {
+        std::cerr << "getcwd() error" << std::endl;
+    }
+}
 
-    sleep(3);
+WindowController::WindowController() {
+    print_working_directory();
     system("eww kill");
 
     const string home_dir = std::getenv("HOME") ? std::getenv("HOME") : "~";

@@ -13,25 +13,9 @@ void signal_handler(int signal)
     exit(0);
 }
 
-void enable_log_out(){
-    std::string path = "/home/xxemokidxx/.config/eww/log.txt";
-        logFile.open(path);
-
-    if (!logFile.is_open()) {
-        std::cerr << "Cant open\n";
-    }
-    else {
-        oldCoutBuffer = std::cout.rdbuf();
-        std::cout.rdbuf(logFile.rdbuf());
-        std::cout << "Log file enabled at: " << path << std::endl;
-    }
-}
-
 int main()
 {
-    enable_log_out();
-
-    std::cout << "Starting larjeuictl..." << std::endl;
+    std::cout << "Starting larjeuictl...\n" << std::endl;
 
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);
