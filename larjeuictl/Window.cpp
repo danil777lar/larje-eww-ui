@@ -72,7 +72,7 @@ string Window::get_yuck_content() const {
 
     for (int i = 0; i < widget_commands.size(); ++i) {
         string name = get_widget_name(widget_commands[i], i);
-        yuck_content += "(defvar var-" + name + " \" (label :class 'back' :text '+') \")\n";
+        yuck_content += "(defvar var-" + name + " \"\")\n";
     }
 
     yuck_content += "\n\n";

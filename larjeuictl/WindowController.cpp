@@ -53,6 +53,10 @@ WindowController::WindowController() {
 
     system("eww daemon");
 
+    while (system("pgrep -x eww > /dev/null") != 0) {
+        sleep(0.1);
+    }
+
     for (Window* win : windows) {
         win->open();
     }
