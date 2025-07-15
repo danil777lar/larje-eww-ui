@@ -11,13 +11,6 @@
 using string = std::string;
 using json = nlohmann::json;
 
-string root_path;
-string window_path;
-json config_content;
-
-std::vector<string> widget_commands;
-std::vector<pid_t> subprocesses;
-
 Window::Window(const string &root_path, const string &window_path) {
     this->root_path = root_path;
     this->window_path = window_path;

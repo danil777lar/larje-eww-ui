@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <unordered_map>
 
+#include "eww_ui/Box.h"
+
 using string = std::string;
 
 std::unordered_map<std::string, std::string> process_args(int argc, char **argv) {
@@ -49,11 +51,14 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    Box* box = new Box();
+    string var_content = box->serialize();
+    system(("notify-send '" + var_content + "'").c_str());
+
     while (true) {
-        string var_content = "";
-        var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
+        /*var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
         var_content += "\'" + get_current_battery_percent_str() + "\'";
-        var_content += ")";
+        var_content += ")";*/
 
 
         string command = "eww update " + eww_var_name + "=\"" + var_content + "\"";

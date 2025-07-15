@@ -10,8 +10,6 @@
 using string = std::string;
 namespace fs = std::filesystem;
 
-std::vector<Window*> windows = {};
-
 std::vector<string> WindowController::find_window_configs(const fs::path& root, const string& target_name)
 {
     std::vector<string> configs = {};

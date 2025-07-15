@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <filesystem>
+#include "Window.h"
 
 class WindowController {
 
@@ -11,6 +12,8 @@ public:
     ~WindowController();
 
 private:
+    std::vector<Window*> windows;
+
     std::vector<std::string> find_window_configs(const std::filesystem::path& root, const std::string& target_name);
 };
 
