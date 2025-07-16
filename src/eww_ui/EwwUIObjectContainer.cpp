@@ -10,7 +10,7 @@ void EwwUIObjectContainer::addChild(EwwUIObject *child) {
     _children.push_back(child);
 }
 
-string EwwUIObjectContainer::getContent() const override{
+string EwwUIObjectContainer::getContent() const{
     string result = "";
     for (EwwUIObject *child : _children) {
         result += child->serialize();

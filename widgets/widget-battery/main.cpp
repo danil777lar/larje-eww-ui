@@ -52,7 +52,9 @@ int main(int argc, char **argv) {
     }
 
     Box* box = new Box();
-
+    box->_class = Class("back");
+    box->_halign = HAlign::Start;
+    box->_expand = Expand::True;
 
     string var_content = box->serialize();
     system(("notify-send '" + var_content + "'").c_str());

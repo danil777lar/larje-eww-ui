@@ -13,7 +13,21 @@ string EwwUIObject::getContent() const {
 
 string EwwUIObject::serialize() const {
     string result = "(" + _name + ": ";
+
     result += _class.toString();
+    result += _id.toString();
+    result += _halign.toString();
+    result += _valign.toString();
+    result += _spaceEvenly.toString();
+    result += _spacing.toString();
+    result += _orientation.toString();
+    result += _expand.toString();
+    result += _minHeight.toString();
+    result += _minWidth.toString();
+    result += _maxHeight.toString();
+    result += _maxWidth.toString();
+    result += _toolTip.toString();
+
     result += getContent();
     result += ")";
     return result;
