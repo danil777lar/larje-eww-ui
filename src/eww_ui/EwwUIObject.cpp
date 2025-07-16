@@ -1,7 +1,3 @@
-//
-// Created by xxemokidxx on 7/15/25.
-//
-
 #include "EwwUIObject.h"
 #include "eww_ui/EwwUIObject.h"
 
@@ -11,14 +7,14 @@ EwwUIObject::EwwUIObject(const std::string &name) {
     _name = name;
 }
 
-
-void EwwUIObject::addChild(EwwUIObject* child) {
-    _children.push_back(child);
+string EwwUIObject::getContent() const {
+    return "";
 }
 
 string EwwUIObject::serialize() const {
     string result = "(" + _name + ": ";
     result += ":class \"" + _class + "\" ";
+    result += getContent();
     result += ")";
     return result;
 }

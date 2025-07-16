@@ -23,13 +23,13 @@ protected:
         std::string _maxHeight;
         std::string _toolTip;
 
-        std::vector<EwwUIObject*> _children;
-
         EwwUIObject(const std::string &name);
 
+        virtual std::string getContent() const;
+
 public:
-        void addChild(EwwUIObject* child);
         std::string serialize() const;
+
 };
 
 

@@ -2,8 +2,9 @@
 #define BOX_H
 
 #include "EwwUIObject.h"
+#include "EwwUIObjectContainer.h"
 
-class Box : public EwwUIObject {
+class Box : public EwwUIObjectContainer {
 public:
     Box();
 };
