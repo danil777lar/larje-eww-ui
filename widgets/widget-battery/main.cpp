@@ -52,14 +52,15 @@ int main(int argc, char **argv) {
     }
 
     Box* box = new Box();
-    string var_content = "";//box->serialize();
+
+
+    string var_content = box->serialize();
     system(("notify-send '" + var_content + "'").c_str());
 
     while (true) {
-        var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
+        /*var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
         var_content += "\'" + get_current_battery_percent_str() + "\'";
-        var_content += ")";
-
+        var_content += ")";*/
 
         string command = "eww update " + eww_var_name + "=\"" + var_content + "\"";
         system(command.c_str());

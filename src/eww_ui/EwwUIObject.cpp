@@ -13,7 +13,7 @@ string EwwUIObject::getContent() const {
 
 string EwwUIObject::serialize() const {
     string result = "(" + _name + ": ";
-    result += ":class \"" + _class + "\" ";
+    result += _class.toString();
     result += getContent();
     result += ")";
     return result;

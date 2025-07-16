@@ -4,32 +4,33 @@
 #include <string>
 #include <vector>
 
+#include "EwwProperties.h"
+
 
 class EwwUIObject {
 protected:
         std::string _name;
 
-        std::string _class = "back";
-        std::string _id;
-        std::string _halign;
-        std::string _valign;
-        std::string _spaceEvenly;
-        std::string _spacing;
-        std::string _orientation;
-        std::string _expand;
-        std::string _minWidth;
-        std::string _minHeight;
-        std::string _maxWidth;
-        std::string _maxHeight;
-        std::string _toolTip;
-
-        EwwUIObject(const std::string &name);
+        explicit EwwUIObject(const std::string &name);
 
         virtual std::string getContent() const;
 
 public:
-        std::string serialize() const;
+        Class _class;
+        Id _id;
+        HAlign _halign;
+        VAlign _valign;
+        SpaceEvenly _spaceEvenly;
+        Spacing _spacing;
+        Orientation _orientation;
+        Expand _expand;
+        MinHeight _minHeight;
+        MaxHeight _maxHeight;
+        MinWidth _minWidth;
+        MaxWidth _maxWidth;
+        ToolTip _toolTip;
 
+        std::string serialize() const;
 };
 
 

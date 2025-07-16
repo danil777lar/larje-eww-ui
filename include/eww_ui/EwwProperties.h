@@ -12,87 +12,100 @@ protected:
     virtual ~EwwProperty() = default;
 };
 
-class Class : EwwProperty {
+class Class : public EwwProperty {
 public:
+    Class();
     explicit Class(const std::string &value);
 };
 
-class Id : EwwProperty {
+class Id : public EwwProperty {
 public:
+    Id();
     explicit Id(const std::string &value);
 };
 
-class HAlign : EwwProperty {
+class HAlign : public EwwProperty {
 public:
     static const HAlign Start;
     static const HAlign Center;
     static const HAlign End;
     static const HAlign Fill;
+    HAlign();
 private:
     explicit HAlign(const std::string &value);
 };
 
-class VAlign : EwwProperty {
+class VAlign : public EwwProperty {
 public:
     static const VAlign Start;
     static const VAlign Center;
     static const VAlign End;
     static const VAlign Fill;
+    VAlign();
 private:
     explicit VAlign(const std::string &value);
 };
 
-class SpaceEvenly : EwwProperty {
+class SpaceEvenly : public EwwProperty {
 public:
     static const SpaceEvenly True;
     static const SpaceEvenly False;
+    SpaceEvenly();
 private:
     explicit SpaceEvenly(const std::string &value);
 };
 
-class Spacing : EwwProperty {
+class Spacing : public EwwProperty {
 public:
+    Spacing();
     explicit Spacing(const std::string &value);
 };
 
-class Orientation : EwwProperty {
+class Orientation : public EwwProperty {
 public:
     static const Orientation Vertical;
     static const Orientation Horizontal;
+    Orientation();
 private:
     explicit Orientation(const std::string &value);
 };
 
-class Expand : EwwProperty {
+class Expand : public EwwProperty {
 public:
     static const Expand True;
     static const Expand False;
+    Expand();
 private:
     explicit Expand(const std::string &value);
 };
 
-class MinHeight : EwwProperty {
+class MinHeight : public EwwProperty {
 public:
+    MinHeight();
     explicit MinHeight(const std::string &value);
 };
 
-class MinWidth : EwwProperty {
+class MinWidth : public EwwProperty {
 public:
+    MinWidth();
     explicit MinWidth(const std::string &value);
 };
 
-class MaxHeight : EwwProperty {
+class MaxHeight : public EwwProperty {
 public:
+    MaxHeight();
     explicit MaxHeight(const std::string &value);
 };
 
-class MaxWidth : EwwProperty {
+class MaxWidth : public EwwProperty {
 public:
+    MaxWidth();
     explicit MaxWidth(const std::string &value);
 };
 
-class ToolTip : EwwProperty {
+class ToolTip : public EwwProperty {
 public:
+    ToolTip();
     explicit ToolTip(const std::string &value);
 };
 
