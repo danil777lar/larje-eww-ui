@@ -20,10 +20,11 @@ public:
         Id _id;
         HAlign _halign;
         VAlign _valign;
+        HExpand _hexpand;
+        VExpand _vexpand;
         SpaceEvenly _spaceEvenly;
         Spacing _spacing;
         Orientation _orientation;
-        Expand _expand;
         MinHeight _minHeight;
         MaxHeight _maxHeight;
         MinWidth _minWidth;

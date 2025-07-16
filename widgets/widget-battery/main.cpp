@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <unordered_map>
 
+#include "Label.h"
 #include "eww_ui/Box.h"
 
 using string = std::string;
@@ -51,22 +52,34 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    Box* box = new Box();
-    box->_class = Class("back");
-    box->_halign = HAlign::Start;
-    box->_expand = Expand::True;
+    string var_content = "";
 
-    string var_content = box->serialize();
-    system(("notify-send '" + var_content + "'").c_str());
+    /*Box* box = new Box();
+    box->_class = Class("back");
+    box->_orientation = Orientation::Vertical;
+    box->_spaceEvenly = SpaceEvenly::True;
+    box->_vexpand = VExpand::True;
+    box->_hexpand = HExpand::True;*/
+
+    Label* label = new Label();
+    label->_class = Class("back");
+    label->_vexpand = VExpand::True;
+    label->_hexpand = HExpand::True;
+    //box->addChild(label);
+
+    label->_text = Text(get_current_battery_percent_str());
+    //var_content = box->serialize();
+    var_content = label->serialize();
+
+    system(("wl-copy '" + var_content + "'").c_str());
+    std::cout << var_content << std::endl;
 
     while (true) {
-        /*var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
-        var_content += "\'" + get_current_battery_percent_str() + "\'";
-        var_content += ")";*/
-
+        label->_text = Text(get_current_battery_percent_str());
+        //var_content = box->serialize();
+        var_content = label->serialize();
         string command = "eww update " + eww_var_name + "=\"" + var_content + "\"";
         system(command.c_str());
-
         sleep(update_time);
     }
 

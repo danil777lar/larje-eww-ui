@@ -6,11 +6,14 @@ class EwwProperty {
 public:
     virtual std::string toString() const;
 protected:
+    bool _addQuotes;
     std::string _name;
     std::string _value;
-    EwwProperty(const std::string &name);
+    EwwProperty(const std::string &name, const bool &addQuotes);
     virtual ~EwwProperty() = default;
 };
+
+// ----------------- GENERAL ----------------------------
 
 class Class : public EwwProperty {
 public:
@@ -46,6 +49,24 @@ private:
     explicit VAlign(const std::string &value);
 };
 
+class VExpand : public EwwProperty {
+public:
+    static const VExpand True;
+    static const VExpand False;
+    VExpand();
+private:
+    explicit VExpand(const std::string &value);
+};
+
+class HExpand : public EwwProperty {
+public:
+    static const HExpand True;
+    static const HExpand False;
+    HExpand();
+private:
+    explicit HExpand(const std::string &value);
+};
+
 class SpaceEvenly : public EwwProperty {
 public:
     static const SpaceEvenly True;
@@ -68,15 +89,6 @@ public:
     Orientation();
 private:
     explicit Orientation(const std::string &value);
-};
-
-class Expand : public EwwProperty {
-public:
-    static const Expand True;
-    static const Expand False;
-    Expand();
-private:
-    explicit Expand(const std::string &value);
 };
 
 class MinHeight : public EwwProperty {
@@ -108,5 +120,18 @@ public:
     ToolTip();
     explicit ToolTip(const std::string &value);
 };
+
+// ------------------------------------------------------
+
+
+// --------------------  LABEL  -----------------------
+
+class Text : public EwwProperty {
+public:
+    Text();
+    explicit Text(const std::string &value);
+};
+
+// ------------------------------------------------------
 
 #endif

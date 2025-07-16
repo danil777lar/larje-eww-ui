@@ -50,8 +50,7 @@ int main(int argc, char **argv) {
         string var_content = "";
         var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
         var_content += "\'" + get_current_time_str() + "\'";
-        var_content += ")";
-
+        var_content += " )";
 
         string command = "eww update " + eww_var_name + "=\"" + var_content + "\"";
         system(command.c_str());

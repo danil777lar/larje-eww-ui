@@ -8,24 +8,31 @@
 
 using string = std::string;
 
-EwwProperty::EwwProperty(const string &name) {
+EwwProperty::EwwProperty(const string &name, const bool &addQuotes) {
     _name = name;
+    _addQuotes = addQuotes;
 }
 string EwwProperty::toString() const {
     if (_name.empty() || _value.empty()) {
         return "";
     }
 
-    return _name + ": " + _value + "\n";
+    string n = ":" + _name + " ";
+    string v = _value;
+    if (_addQuotes) {
+        v = "\'" + v + "\'";
+    }
+
+    return n + v + " ";
 }
 
-Class::Class() : EwwProperty("class"){}
-Class::Class(const std::string &value) : EwwProperty("class") {
+Class::Class() : EwwProperty("class", true){}
+Class::Class(const std::string &value) : EwwProperty("class", true) {
     _value = value;
 }
 
-Id::Id() : EwwProperty("id") {}
-Id::Id(const std::string &value) : EwwProperty("id") {
+Id::Id() : EwwProperty("id", true) {}
+Id::Id(const std::string &value) : EwwProperty("id", true) {
     _value = value;
 }
 
@@ -33,8 +40,8 @@ const HAlign HAlign::Start("start");
 const HAlign HAlign::Center("center");
 const HAlign HAlign::End("end");
 const HAlign HAlign::Fill("fill");
-HAlign::HAlign() : EwwProperty("halign") {}
-HAlign::HAlign(const std::string &value) : EwwProperty("halign") {
+HAlign::HAlign() : EwwProperty("halign", true) {}
+HAlign::HAlign(const std::string &value) : EwwProperty("halign", true) {
     _value = value;
 }
 
@@ -42,58 +49,70 @@ const VAlign VAlign::Start("start");
 const VAlign VAlign::Center("center");
 const VAlign VAlign::End("end");
 const VAlign VAlign::Fill("fill");
-VAlign::VAlign() : EwwProperty("valign") {}
-VAlign::VAlign(const std::string &value) : EwwProperty("valign") {
+VAlign::VAlign() : EwwProperty("valign", true) {}
+VAlign::VAlign(const std::string &value) : EwwProperty("valign", true) {
+    _value = value;
+}
+
+const VExpand VExpand::False("false");
+const VExpand VExpand::True("true");
+VExpand::VExpand() : EwwProperty("vexpand", false) {}
+VExpand::VExpand(const std::string &value) : EwwProperty("vexpand", false) {
+    _value = value;
+}
+
+const HExpand HExpand::False("false");
+const HExpand HExpand::True("true");
+HExpand::HExpand() : EwwProperty("hexpand", false) {}
+HExpand::HExpand(const std::string &value) : EwwProperty("hexpand", false) {
     _value = value;
 }
 
 const SpaceEvenly SpaceEvenly::False("false");
 const SpaceEvenly SpaceEvenly::True("true");
-SpaceEvenly::SpaceEvenly() : EwwProperty("space-evenly") {}
-SpaceEvenly::SpaceEvenly(const std::string &value) : EwwProperty("space-evenly") {
+SpaceEvenly::SpaceEvenly() : EwwProperty("space-evenly", false) {}
+SpaceEvenly::SpaceEvenly(const std::string &value) : EwwProperty("space-evenly", false) {
     _value = value;
 }
 
-Spacing::Spacing() : EwwProperty("spacing") {}
-Spacing::Spacing(const std::string &value) : EwwProperty("spacing") {
+Spacing::Spacing() : EwwProperty("spacing", false) {}
+Spacing::Spacing(const std::string &value) : EwwProperty("spacing", false) {
     _value = value;
 }
 
 const Orientation Orientation::Vertical("v");
 const Orientation Orientation::Horizontal("h");
-Orientation::Orientation() : EwwProperty("orientation") {}
-Orientation::Orientation(const std::string &value) : EwwProperty("orientation") {
+Orientation::Orientation() : EwwProperty("orientation", true) {}
+Orientation::Orientation(const std::string &value) : EwwProperty("orientation", true) {
     _value = value;
 }
 
-const Expand Expand::False("false");
-const Expand Expand::True("true");
-Expand::Expand() : EwwProperty("expand") {}
-Expand::Expand(const std::string &value) : EwwProperty("expand") {
+MinHeight::MinHeight() : EwwProperty("min-height", true) {}
+MinHeight::MinHeight(const std::string &value) : EwwProperty("min-height", true) {
     _value = value;
 }
 
-MinHeight::MinHeight() : EwwProperty("min-height") {}
-MinHeight::MinHeight(const std::string &value) : EwwProperty("min-height") {
+MinWidth::MinWidth() : EwwProperty("min-width", true) {}
+MinWidth::MinWidth(const std::string &value) : EwwProperty("min-width", true) {
     _value = value;
 }
 
-MinWidth::MinWidth() : EwwProperty("min-width") {}
-MinWidth::MinWidth(const std::string &value) : EwwProperty("min-width") {
+MaxHeight::MaxHeight() : EwwProperty("max-height", true) {}
+MaxHeight::MaxHeight(const std::string &value) : EwwProperty("max-height", true) {
     _value = value;
 }
 
-MaxHeight::MaxHeight() : EwwProperty("max-height") {}
-MaxHeight::MaxHeight(const std::string &value) : EwwProperty("max-height") {
+MaxWidth::MaxWidth() : EwwProperty("max-width", true) {}
+MaxWidth::MaxWidth(const std::string &value) : EwwProperty("max-width", true) {
     _value = value;
 }
 
-MaxWidth::MaxWidth() : EwwProperty("max-width") {}
-MaxWidth::MaxWidth(const std::string &value) : EwwProperty("max-width") {
+ToolTip::ToolTip() : EwwProperty("tooltip", true) {}
+ToolTip::ToolTip(const std::string &value) : EwwProperty("tooltip", true) {
     _value = value;
 }
 
-ToolTip::ToolTip() : EwwProperty("tooltip") {}
-ToolTip::ToolTip(const std::string &value) : EwwProperty("tooltip") {
+Text::Text() : EwwProperty("text", true) {}
+Text::Text(const std::string &value) : EwwProperty("text", true) {
     _value = value;
 }
