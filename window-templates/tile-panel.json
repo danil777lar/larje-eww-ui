@@ -1,0 +1,22 @@
+{
+    "name": "tile-panel",
+
+    "window":
+    [
+        ":monitor 0",
+        ":geometry (geometry :width \"20%\" :height \"10%\" :anchor \"center\")",
+        ":stacking \"bg\"",
+        ":windowtype \"normal\"",
+        ":focusable false"
+    ],
+
+    "widgets_root":
+    {
+        "orientation": "v",
+        "widgets":
+        [
+            "widget-clock --update_time 1",
+	    "widget-battery --update_time 10"
+        ]
+    }
+}
