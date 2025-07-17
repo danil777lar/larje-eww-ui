@@ -46,7 +46,8 @@ def generate_service_content():
     service_content = f"""
     [Unit]
     Description=eww based ui ctl by daniil larzhevskii
-    After=network.target
+    After=graphical-session.target
+    Requires=graphical-session.target
 
     [Service]
     ExecStart={exec_path}/larjeuictl
