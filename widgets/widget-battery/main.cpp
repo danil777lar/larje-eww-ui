@@ -33,7 +33,7 @@ std::string get_current_battery_percent_str() {
 
     int percentage;
     file >> percentage;
-    return std::to_string(percentage);
+    return std::to_string(percentage) + "%";
 }
 
 int main(int argc, char **argv) {

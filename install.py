@@ -30,12 +30,25 @@ def copy_bin_files():
         subprocess.run(["rm", "-rf", path], check=True)
 
     if not os.path.exists(path):
-        print(f"Копирование новых бинарных файлов: {path}")
         os.system(f"mkdir -p {path}")
 
+    print(f"Копирование новых бинарных файлов: {path}")
     os.system(f"cp -r bin/* {path}")
+
     print(f"Бинарные файлы скопированы в {path}")
     print(f"\n")
+
+def copy_styles():
+    path = expand_path(".config/eww/styles")
+    if not os.path.exists(path):
+        os.system(f"mkdir -p {path}")
+
+    print(f"Копирование стилей в {path}")
+    os.system(f"cp -r styles/* {path}")
+
+    print(f"Инициализация eww.scss")
+    eww_scss_content = "@use 'styles/main';"
+    os.system(f"echo \"{eww_scss_content}\" > {expand_path(".config/eww/eww.scss")}")
 
 
 def generate_service_content():
@@ -82,4 +95,5 @@ if __name__ == "__main__":
 
     create_working_directory()
     copy_bin_files()
+    copy_styles()
     generate_service_content()
