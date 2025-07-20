@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <csignal>
+
+#include "larje_utils.hpp"
 #include "WindowController.h"
 
 WindowController* window_controller;
@@ -15,10 +17,11 @@ void signal_handler(int signal)
 
 int main()
 {
-    std::cout << "Starting larjeuictl...\n" << std::endl;
+    log("Larjeuictl:main", "Starting larjeuictl...\n");
 
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);
+
     window_controller = new WindowController();
 
     while (true) {

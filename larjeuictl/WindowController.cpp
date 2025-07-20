@@ -6,6 +6,7 @@
 #include <csignal>
 #include "WindowController.h"
 #include "Window.h"
+#include "larje_utils.hpp"
 
 using string = std::string;
 namespace fs = std::filesystem;
@@ -29,13 +30,15 @@ std::vector<string> WindowController::find_window_configs(const fs::path& root, 
 void print_working_directory() {
     char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) != nullptr) {
-        std::cout << "Current working directory: " << cwd << std::endl;
+        log("Larjeuictl:WindowController", "Current working directory: " + string(cwd));
     } else {
         std::cerr << "getcwd() error" << std::endl;
     }
 }
 
 WindowController::WindowController() {
+    log("Larjeuictl:WindowController", "Create WindowController instance");
+
     print_working_directory();
     system("eww kill");
 
@@ -59,10 +62,12 @@ WindowController::WindowController() {
         win->open();
     }
 
-    std::cout << "Found windows count: " << windows.size() << std::endl;
+    log("Larjeuictl:WindowController", "Found windows count: " + windows.size());
 }
 
 WindowController::~WindowController() {
+    log("Larjeuictl:WindowController", "Delete WindowController instance");
+
     for (Window* win : windows) {
         delete win;
     }

@@ -7,6 +7,7 @@
 #include "Window.h"
 
 #include "json.hpp"
+#include "larje_utils.hpp"
 
 using string = std::string;
 using json = nlohmann::json;
@@ -21,20 +22,20 @@ Window::Window(const string &root_path, const string &window_path) {
 }
 
 Window::~Window() {
-    std::cout << "Delete window " << config_content["name"] << std::endl;
+    log("Larjeuictl:Window", "Delete window " + config_content["name"].get<string>());
 }
 
 void Window::open() {
-    std::cout << "Open window " << config_content["name"] << std::endl;
+    log("Larjeuictl:Window", "Open window " + config_content["name"].get<string>());
     std::cout << " " << std::endl;
+
     subprocesses.clear();
-    std::cout << "Start cicle b" << std::endl;
-    for (int i = 0; i < widget_commands.size(); ++i) {
-        pid_t subprocess = run_subprocess("./widgets/" + widget_commands[i]);
+    for (const string& widget_command : widget_commands) {
+        pid_t subprocess = run_subprocess("./widgets/" + widget_command);
         if (subprocess != -1) {
             subprocesses.push_back(subprocess);
         } else {
-            std::cout << "Failed to run widget command: " << widget_commands[i] << std::endl;
+            log("Larjeuictl:Window", "Failed to run widget command: " + widget_command);
         }
 
         std::cout << " " << std::endl;
@@ -78,7 +79,7 @@ string Window::get_yuck_content() const {
         yuck_content += get_widgets(config_content["widgets_root"], 0, new std::vector<string>());
     }
     else {
-        std::cout << "window.get_yuck_content: no widgets_root found in config" << std::endl;
+        log("Larjeuictl:Window", "No widgets_root found in config");
     }
     yuck_content += ")";
 
@@ -147,7 +148,7 @@ json Window::parse_config() const {
         parsed = json::parse(content);
     }
     catch (const json::parse_error& e) {
-        std::cout << "window.get_content: json parsing error" << e.what() << std::endl;
+        log("Larjeuictl:Window", "Json parsing error" + string(e.what()));
         return NULL;
     }
 
@@ -173,17 +174,17 @@ pid_t Window::run_subprocess(string cmd) {
     }
     args.push_back(nullptr);
 
-    std::cout << "Run window cmd: " << cmd << std::endl;
+    log("Larjeuictl:Window", "Run window cmd: " + cmd);
 
     pid_t pid = fork();
     if (pid == 0) {
-        std::cout << "Запускаю: " << cmd << " (pid: " << getpid() << ")" << std::endl;
+        log("Larjeuictl:Window", "Run: " + cmd + " (pid: " + std::to_string(pid) + ")");
         execvp(args[0], args.data());
         perror("execvp");
         _exit(1);
     }
     else if (pid > 0) {
-        std::cout << "Процесс запущен в фоне (pid: " << pid << ")" << std::endl;
+        log("Larjeuictl:Window", "Process run in background (pid: " + std::to_string(pid) + ")");
         return pid;
     }
     else {

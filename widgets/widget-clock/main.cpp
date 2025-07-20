@@ -21,7 +21,7 @@ std::unordered_map<std::string, std::string> process_args(int argc, char **argv)
 }
 
 std::string get_current_time_str() {
-    auto now = std::chrono::system_clock::now();
+    std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
     std::time_t t_c = std::chrono::system_clock::to_time_t(now);
     std::tm* local_time = std::localtime(&t_c);
 

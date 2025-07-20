@@ -14,41 +14,55 @@ USER = getpass.getuser()
 def expand_path(path):
     return "~/" + path
 
+def expand_global(path):
+    return os.path.expanduser(path)
+
 def create_working_directory():
     path = expand_path(WORKING_DIRECTORY)
+    print(path)
+    print(f"Проверка рабочей директории")
 
-    if not os.path.exists(path):
+    if not os.path.exists(expand_global(path)):
         os.system(f"mkdir -p {path}")
-        print(f"Рабочая директория создана: {path}")
-        print(f"\n")
+        print(f"Рабочая директория создана")
+
+    print(f"\n")
 
 def copy_bin_files():
     path = expand_path(EXECUTABLE_PATH)
+    print(path)
 
-    if os.path.exists(path):
-        print(f"Удаление старых бинарных файлов: {path}")
+    if os.path.exists(expand_global(path)):
+        print(f"Удаление старых бинарных файлов")
         subprocess.run(["rm", "-rf", path], check=True)
 
-    if not os.path.exists(path):
+    if not os.path.exists(expand_global(path)):
         os.system(f"mkdir -p {path}")
 
-    print(f"Копирование новых бинарных файлов: {path}")
+    print(f"Копирование новых бинарных файлов")
     os.system(f"cp -r bin/* {path}")
 
-    print(f"Бинарные файлы скопированы в {path}")
+    print(f"Бинарные файлы скопированы")
     print(f"\n")
 
 def copy_styles():
     path = expand_path(".config/eww/styles")
-    if not os.path.exists(path):
+    print(path)
+
+    if os.path.exists(expand_global(path)):
+        print(f"Удаление старых стилей")
+        subprocess.run(["rm", "-rf", path], check=True)
+
+    if not os.path.exists(expand_global(path)):
         os.system(f"mkdir -p {path}")
 
-    print(f"Копирование стилей в {path}")
+    print(f"Копирование стилей")
     os.system(f"cp -r styles/* {path}")
 
     print(f"Инициализация eww.scss")
     eww_scss_content = "@use 'styles/main';"
     os.system(f"echo \"{eww_scss_content}\" > {expand_path(".config/eww/eww.scss")}")
+    print(f"\n")
 
 
 def generate_service_content():
