@@ -1,0 +1,10 @@
+.label-default{
+  color: $label-text-color;
+  text-shadow:
+          -1 -1 2px $label-text-shadow-color,
+          -1 1 2px $label-text-shadow-color,
+          1 -1 2px $label-text-shadow-color,
+          1 1 2px $label-text-shadow-color;
+  font-size: 2em;
+  margin: 20px;
+}

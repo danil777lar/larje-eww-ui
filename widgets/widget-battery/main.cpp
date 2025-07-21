@@ -56,12 +56,12 @@ int main(int argc, char **argv) {
     string var_content = "";
 
     Box* back = new Box();
-    back->_class = Class("back");
+    back->_class = Class("card-default");
     back->_vexpand = VExpand::True;
     back->_hexpand = HExpand::True;
 
     Label* label = new Label();
-    label->_class = Class("text");
+    label->_class = Class("label-default");
     label->_vexpand = VExpand::True;
     label->_hexpand = HExpand::True;
     back->addChild(label);

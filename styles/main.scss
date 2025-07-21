@@ -1,25 +1,5 @@
-* {
-  all: unset;
-}
+@import 'reset';
+@import 'theme';
 
-.back {
-  background-color: rgba(102, 0, 255, 0.1);
-  border-radius: 20px;
-  box-shadow:
-    //inset 3 5 5px rgb(255, 166, 0, 1),
-    //inset -3 -5 5px rgb(255, 115, 0, 1);
-          inset 3 5 5px rgb(227, 199, 255),
-          inset -3 -5 5px rgb(255, 161, 161);
-  margin: 10px;
-}
-
-.text{
-  color: rgb(255, 110, 145);
-  text-shadow:
-          -1 -1 2px rgb(255, 255, 255, 1),
-          -1 1 2px rgb(255, 255, 255, 1),
-          1 -1 2px rgb(255, 255, 255, 1),
-          1 1 2px rgb(255, 255, 255, 1);
-  font-size: 2em;
-  margin: 20px;
-}
+@import 'components/card-default';
+@import 'components/label-default';

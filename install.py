@@ -34,7 +34,7 @@ def copy_bin_files():
 
     if os.path.exists(expand_global(path)):
         print(f"Удаление старых бинарных файлов")
-        subprocess.run(["rm", "-rf", path], check=True)
+        os.system(f"rm -rf {path}")
 
     if not os.path.exists(expand_global(path)):
         os.system(f"mkdir -p {path}")
@@ -51,7 +51,7 @@ def copy_styles():
 
     if os.path.exists(expand_global(path)):
         print(f"Удаление старых стилей")
-        subprocess.run(["rm", "-rf", path], check=True)
+        os.system(f"rm -rf {path}")
 
     if not os.path.exists(expand_global(path)):
         os.system(f"mkdir -p {path}")
