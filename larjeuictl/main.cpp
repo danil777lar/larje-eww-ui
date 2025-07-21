@@ -24,6 +24,9 @@ int main()
 
     window_controller = new WindowController();
 
+    sleep(1);
+    system("hyprctl reload");
+
     while (true) {
         sleep(1);
     }

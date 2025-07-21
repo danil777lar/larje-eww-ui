@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "Label.h"
+#include "larje_utils.hpp"
 #include "eww_ui/Box.h"
 
 using string = std::string;
@@ -54,30 +55,20 @@ int main(int argc, char **argv) {
 
     string var_content = "";
 
-    /*Box* box = new Box();
-    box->_class = Class("back");
-    box->_orientation = Orientation::Vertical;
-    box->_spaceEvenly = SpaceEvenly::True;
-    box->_vexpand = VExpand::True;
-    box->_hexpand = HExpand::True;*/
+    Box* back = new Box();
+    back->_class = Class("back");
+    back->_vexpand = VExpand::True;
+    back->_hexpand = HExpand::True;
 
     Label* label = new Label();
-    label->_class = Class("back");
+    label->_class = Class("text");
     label->_vexpand = VExpand::True;
     label->_hexpand = HExpand::True;
-    //box->addChild(label);
-
-    label->_text = Text(get_current_battery_percent_str());
-    //var_content = box->serialize();
-    var_content = label->serialize();
-
-    system(("wl-copy '" + var_content + "'").c_str());
-    std::cout << var_content << std::endl;
+    back->addChild(label);
 
     while (true) {
         label->_text = Text(get_current_battery_percent_str());
-        //var_content = box->serialize();
-        var_content = label->serialize();
+        var_content = back->serialize();
         string command = "eww update " + eww_var_name + "=\"" + var_content + "\"";
         system(command.c_str());
         sleep(update_time);

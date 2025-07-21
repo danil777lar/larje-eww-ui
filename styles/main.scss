@@ -2,19 +2,24 @@
   all: unset;
 }
 
-.root {
-  background-color: rgba(0, 0, 0, 0);
-}
-
 .back {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(102, 0, 255, 0.1);
   border-radius: 20px;
-  padding: 30px;
-  margin: 20px;
-  color: white;
-  font-size: 2em;
+  box-shadow:
+    //inset 3 5 5px rgb(255, 166, 0, 1),
+    //inset -3 -5 5px rgb(255, 115, 0, 1);
+          inset 3 5 5px rgb(227, 199, 255),
+          inset -3 -5 5px rgb(255, 161, 161);
+  margin: 10px;
 }
 
-.label {
-  background-color: rgba(0, 0, 0, 0);
+.text{
+  color: rgb(255, 110, 145);
+  text-shadow:
+          -1 -1 2px rgb(255, 255, 255, 1),
+          -1 1 2px rgb(255, 255, 255, 1),
+          1 -1 2px rgb(255, 255, 255, 1),
+          1 1 2px rgb(255, 255, 255, 1);
+  font-size: 2em;
+  margin: 20px;
 }

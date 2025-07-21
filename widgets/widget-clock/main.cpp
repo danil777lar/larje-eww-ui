@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include <unordered_map>
 
+#include "Box.h"
+#include "Label.h"
+
 using string = std::string;
 
 std::unordered_map<std::string, std::string> process_args(int argc, char **argv) {
@@ -46,11 +49,22 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    string var_content = "";
+
+    Box* back = new Box();
+    back->_class = Class("back");
+    back->_vexpand = VExpand::True;
+    back->_hexpand = HExpand::True;
+
+    Label* label = new Label();
+    label->_class = Class("text");
+    label->_vexpand = VExpand::True;
+    label->_hexpand = HExpand::True;
+    back->addChild(label);
+
     while (true) {
-        string var_content = "";
-        var_content += "(label :vexpand true :hexpand true :class 'back' :text ";
-        var_content += "\'" + get_current_time_str() + "\'";
-        var_content += " )";
+        label->_text = Text(get_current_time_str());
+        var_content = back->serialize();
 
         string command = "eww update " + eww_var_name + "=\"" + var_content + "\"";
         system(command.c_str());
