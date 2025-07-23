@@ -36,14 +36,32 @@ void print_working_directory() {
     }
 }
 
+void apply_theme(const string& root_dir) {
+    const string theme_path = "styles/palettes/";
+    char* theme_name = std::getenv("LARJEUI_THEME");
+    if (theme_name == nullptr) {
+        theme_name = "volumen-clean-light";
+    }
+
+    string eww_style_content = "@import '" + theme_path + theme_name + "';\n";
+    eww_style_content += "@import 'styles/main';";
+
+    const string cmd = "echo \"" + eww_style_content + "\" > " + root_dir + "/eww.scss";
+    log("WindowController", "Apply theme: " + cmd);
+
+    system(cmd.c_str());
+}
+
 WindowController::WindowController() {
     log("Larjeuictl:WindowController", "Create WindowController instance");
 
-    print_working_directory();
-    system("eww kill");
-
     const string home_dir = std::getenv("HOME") ? std::getenv("HOME") : "~";
     const string root_dir = home_dir + "/.config/eww";
+
+    print_working_directory();
+    apply_theme(root_dir);
+
+    system("eww kill");
     const string file_name = "window.json";
 
     const std::vector<string> windows_configs = find_window_configs(root_dir, file_name);
