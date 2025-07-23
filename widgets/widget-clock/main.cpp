@@ -6,22 +6,9 @@
 
 #include "Box.h"
 #include "Label.h"
+#include "larje_utils.hpp"
 
 using string = std::string;
-
-std::unordered_map<std::string, std::string> process_args(int argc, char **argv) {
-    std::unordered_map<std::string, std::string> args;
-    for (int i = 1; i < argc; ++i) {
-        std::string key = argv[i];
-
-        if (key.rfind("--", 0) == 0 && (i + 1 < argc)) {
-            std::string value = argv[i + 1];
-            args[key] = value;
-            ++i;
-        }
-    }
-    return args;
-}
 
 std::string get_current_time_str() {
     std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();

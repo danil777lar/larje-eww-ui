@@ -10,20 +10,6 @@
 
 using string = std::string;
 
-std::unordered_map<std::string, std::string> process_args(int argc, char **argv) {
-    std::unordered_map<std::string, std::string> args;
-    for (int i = 1; i < argc; ++i) {
-        std::string key = argv[i];
-
-        if (key.rfind("--", 0) == 0 && (i + 1 < argc)) {
-            std::string value = argv[i + 1];
-            args[key] = value;
-            ++i;
-        }
-    }
-    return args;
-}
-
 std::string get_current_battery_percent_str() {
     std::string path = "/sys/class/power_supply/BAT0/capacity";
     std::ifstream file(path);
