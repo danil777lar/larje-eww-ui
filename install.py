@@ -4,8 +4,9 @@ import pwd
 import getpass
 import shutil
 import subprocess
+from pathlib import Path
 
-NAME = "larjeui"
+NAME = "larjeuid"
 EXECUTABLE_PATH = f".local/bin/{NAME}"
 WORKING_DIRECTORY = f".local/bin/{NAME}"
 SERVICE_PATH = f".config/systemd/user/{NAME}.service"
@@ -30,6 +31,7 @@ def create_working_directory():
 
 def copy_bin_files():
     path = expand_path(EXECUTABLE_PATH)
+    copy_path = expand_path(".local/bin")
     print(path)
 
     if os.path.exists(expand_global(path)):
@@ -40,7 +42,7 @@ def copy_bin_files():
         os.system(f"mkdir -p {path}")
 
     print(f"Копирование новых бинарных файлов")
-    os.system(f"cp -r bin/* {path}")
+    os.system(f"cp -r bin/* {copy_path}")
 
     print(f"Бинарные файлы скопированы")
     print(f"\n")
@@ -64,6 +66,25 @@ def copy_styles():
     os.system(f"echo \"{eww_scss_content}\" > {expand_path(".config/eww/eww.scss")}")
     print(f"\n")
 
+def ensure_path_in_shell_configs():
+    print(f"Добавляем PATH в shells")
+
+    path_to_add = ".local/bin"
+    export_line = f'export PATH="$HOME/{path_to_add}:$PATH"\n'
+    shells = [".bashrc", ".zshrc"]
+
+    for shell in shells:
+        rc_path = Path.home() / shell
+        if rc_path.exists():
+            with open(rc_path, "r") as f:
+                lines = f.readlines()
+            if any("export PATH=" in line and path_to_add in line and not "#" in line for line in lines):
+                print(f"{rc_path}: уже содержит PATH")
+            else:
+                with open(rc_path, "a") as f:
+                    f.write(export_line)
+                print(f"{rc_path}: PATH добавлен")
+    print("\n")
 
 def generate_service_content():
     exec_path = "%h/" + EXECUTABLE_PATH
@@ -72,12 +93,12 @@ def generate_service_content():
 
     service_content = f"""
     [Unit]
-    Description=eww based ui ctl by daniil larzhevskii
+    Description=eww based ui by daniil larzhevskii
     After=graphical-session.target
     Requires=graphical-session.target
 
     [Service]
-    ExecStart={exec_path}/larjeuictl
+    ExecStart={exec_path}/larjeuid
     WorkingDirectory={work_dir}
     
     Environment=PATH=/usr/local/bin:/usr/bin:/bin
@@ -107,6 +128,7 @@ if __name__ == "__main__":
     os.system(f"systemctl --user disable {NAME}.service")
     print(f"\n")
 
+    ensure_path_in_shell_configs()
     create_working_directory()
     copy_bin_files()
     copy_styles()
