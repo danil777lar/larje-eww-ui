@@ -38,7 +38,7 @@ void print_working_directory() {
 
 void apply_theme(const string& root_dir) {
     const string theme_path = "styles/palettes/";
-    char* theme_name = std::getenv("LARJEUI_THEME");
+    const char* theme_name = std::getenv("LARJEUI_THEME");
     if (theme_name == nullptr) {
         theme_name = "volumen-clean-light";
     }

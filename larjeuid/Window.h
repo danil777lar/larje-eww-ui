@@ -27,13 +27,14 @@ class Window
     std::vector<string> widget_commands;
 
     void create_yuck_file() const;
+    void run_layout();
     string get_yuck_content() const;
     std::vector<string> get_widget_commands() const;
     string get_widgets(json box, int depth, std::vector<string>* widget_commands) const;
     string get_widget_name(string widget_command, int index) const;
     json parse_config() const;
 
-    pid_t run_subprocess(string cmd);
+    void run_subprocess(string cmd);
     void kill_subprocess(pid_t pid);
 };
 

@@ -30,14 +30,10 @@ void Window::open() {
     std::cout << " " << std::endl;
 
     subprocesses.clear();
-    for (const string& widget_command : widget_commands) {
-        pid_t subprocess = run_subprocess("./widgets/" + widget_command);
-        if (subprocess != -1) {
-            subprocesses.push_back(subprocess);
-        } else {
-            log("Larjeuictl:Window", "Failed to run widget command: " + widget_command);
-        }
 
+    run_layout();
+    for (const string& widget_command : widget_commands) {
+        run_subprocess("./widgets/" + widget_command);
         std::cout << " " << std::endl;
     }
     system(("eww open " + config_content["name"].get<string>()).c_str());
@@ -62,8 +58,11 @@ void Window::create_yuck_file() const {
 }
 
 string Window::get_yuck_content() const {
+    string root_widget_name = config_content["name"].get<string>()  + "-root";
+    string root_var_name = "var-" + root_widget_name;
     string yuck_content = "";
 
+    yuck_content += "(defvar " + root_var_name + " \"\")\n";
     for (int i = 0; i < widget_commands.size(); ++i) {
         string name = get_widget_name(widget_commands[i], i);
         yuck_content += "(defvar var-" + name + " \"\")\n";
@@ -74,16 +73,11 @@ string Window::get_yuck_content() const {
     for (const nlohmann::basic_json<> &key: config_content["window"]) {
         yuck_content += "  " + key.get<string>() + "\n";
     }
-
-    if (config_content.contains("widgets_root")) {
-        yuck_content += get_widgets(config_content["widgets_root"], 0, new std::vector<string>());
-    }
-    else {
-        log("Larjeuictl:Window", "No widgets_root found in config");
-    }
-    yuck_content += ")";
+    yuck_content += "  (" + root_widget_name + "))\n";
 
     yuck_content += "\n\n";
+    yuck_content += "(defwidget " + root_widget_name + " []\n";
+    yuck_content += "   (literal :content " + root_var_name + "))\n";
     for (int i = 0; i < widget_commands.size(); ++i) {
         string name = get_widget_name(widget_commands[i], i);
         yuck_content += "(defwidget " + name + " []\n";
@@ -92,6 +86,14 @@ string Window::get_yuck_content() const {
 
     return yuck_content;
 }
+
+void Window::run_layout() {
+    string var_name = "var-" + config_content["name"].get<string>() + "-root";
+    string cmd = "./layouts/layout-default ";
+    cmd += "--var_name " + var_name + " ";
+    run_subprocess(cmd);
+}
+
 
 string Window::get_widgets(json box, int depth, std::vector<string>* widget_out) const {
     string spacing = "";
@@ -161,7 +163,7 @@ std::vector<string> Window::get_widget_commands() const {
     return *tmp;
 }
 
-pid_t Window::run_subprocess(string cmd) {
+void Window::run_subprocess(string cmd) {
     std::istringstream iss(cmd);
     std::string token;
     std::vector<char*> args;
@@ -185,11 +187,13 @@ pid_t Window::run_subprocess(string cmd) {
     }
     else if (pid > 0) {
         log("Larjeuictl:Window", "Process run in background (pid: " + std::to_string(pid) + ")");
-        return pid;
     }
     else {
         perror("fork");
-        return -1;
+    }
+
+    if (pid != -1) {
+        subprocesses.push_back(pid);
     }
 }
 
